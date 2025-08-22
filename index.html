@@ -2,9 +2,39 @@
 <html lang="id">
   <head>
 
-    <audio autoplay loop>
-      <source src="https://raw.githubusercontent.com/Risqiguan123/musik/refs/heads/main/download.mp3" type="audio/mpeg" />
-    </audio>
+   <!-- AUDIO SAJA -->
+<audio id="bg-music" preload="auto" autoplay loop muted>
+  <source src="https://raw.githubusercontent.com/Risqiguan123/musik/main/download.mp3" type="audio/mpeg">
+  Browser kamu tidak mendukung audio.
+</audio>
+
+<script>
+(function () {
+  const a = document.getElementById('bg-music');
+
+  function start(unmuteDelay = 2000) {
+    a.muted = true;
+    a.play().then(() => {
+      // sudah playing dalam kondisi muted → unmute setelah delay
+      setTimeout(() => { a.muted = false; }, unmuteDelay);
+    }).catch(() => {
+      // kalau tetap diblokir, tunggu gesture pertama
+      const unlock = () => {
+        a.muted = false;
+        a.play().catch(()=>{});
+        document.removeEventListener('pointerdown', unlock);
+        document.removeEventListener('keydown', unlock);
+      };
+      document.addEventListener('pointerdown', unlock, { once: true });
+      document.addEventListener('keydown', unlock, { once: true });
+    });
+  }
+
+  if (document.readyState === 'complete') start();
+  else window.addEventListener('load', start);
+})();
+</script>
+
 
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -573,4 +603,5 @@
     </script>
   </body>
 </html>
+
 
